@@ -1,3 +1,4 @@
+import 'package:animated_do_app/src/pages/twitter_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -18,7 +19,10 @@ class Pagina1Page extends StatelessWidget {
         actions: [
 
           IconButton(
-            onPressed: (){},
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TwitterPage())
+              );
+            },
             icon: FaIcon(FontAwesomeIcons.twitter)
             ),
 
