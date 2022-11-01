@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -9,15 +10,19 @@ class NavigationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Notifications Page'),
-        centerTitle: true,
-        backgroundColor: Colors.amber,
-      ),
-      floatingActionButton: _BotonFlotante(),
+    return ChangeNotifierProvider(
+      create: (context) => _NotificationModel(),
 
-      bottomNavigationBar: _BottomNavigation(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Notifications Page'),
+          centerTitle: true,
+          backgroundColor: Colors.amber,
+        ),
+        floatingActionButton: _BotonFlotante(),
+    
+        bottomNavigationBar: _BottomNavigation(),
+      ),
     );
     
   }
@@ -28,9 +33,16 @@ class _BotonFlotante extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    int numero = Provider.of<_NotificationModel>(context).numero;
     
     return FloatingActionButton(
-      onPressed: (){},
+      onPressed: (){
+        Provider.of<_NotificationModel>(context, listen: false).numero;
+        numero++;
+        Provider.of<_NotificationModel>(context, listen: false).numero = numero;
+
+      },
       child: FaIcon( FontAwesomeIcons.play),
       backgroundColor: Colors.amber,
       );
@@ -43,6 +55,8 @@ class _BottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final numero = Provider.of<_NotificationModel>(context).numero;
 
     return BottomNavigationBar(
       currentIndex: 0,
@@ -65,7 +79,7 @@ class _BottomNavigation extends StatelessWidget {
                 top: 0.0,
                 right: 0.0,
                 child: Container(
-                  child: Text( '9', style: TextStyle( color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold),),
+                  child: Text( '$numero', style: TextStyle( color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold),),
                   width: 12,
                   height: 12,
                   alignment: Alignment.center,
@@ -87,4 +101,17 @@ class _BottomNavigation extends StatelessWidget {
       );
     
   }
+}
+
+class _NotificationModel extends ChangeNotifier {
+
+  int _numero = 0;
+
+  int get numero => this._numero;
+
+  set numero ( int valor){
+    _numero = valor;
+    notifyListeners();
+  }
+
 }
